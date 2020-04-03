@@ -25,4 +25,6 @@ func InitAPI(wgParent *sync.WaitGroup) {
 	{
 		routerAPI.GET("/:id", person.GetByID)
 	}
+
+	router.Run(":3000")
 }

@@ -1,9 +1,10 @@
 package person
 
 import (
-	"context"
 	"database/sql"
+	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lffranca/careers/util"
@@ -17,12 +18,19 @@ func GetByID(c *gin.Context) {
 		return
 	}
 
-	if err := db.PingContext(context.Background()); err != nil {
+	id, errToInt := strconv.Atoi(c.Param("id"))
+	if errToInt != nil {
+		log.Println(errToInt)
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid param"})
+		return
+	}
+
+	person, errPerson := getPersonByID(db, id)
+	if errPerson != nil {
+		log.Println(errPerson)
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid request"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"OK": "OK",
-	})
+	c.JSON(http.StatusOK, person)
 }
