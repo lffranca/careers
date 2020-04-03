@@ -1,6 +1,0 @@
-package: github.com/lffranca/careers
-import:
-- package: github.com/gin-gonic/gin
-  version: ^1.6.2
-- package: github.com/lib/pq
-  version: ^1.3.0

@@ -1,7 +1,16 @@
 package main
 
-import "log"
+import (
+	"sync"
+
+	"github.com/lffranca/careers/api"
+)
 
 func main() {
-	log.Println("RUN MAIN")
+	wg := &sync.WaitGroup{}
+
+	wg.Add(1)
+	go api.InitAPI(wg)
+
+	wg.Wait()
 }
