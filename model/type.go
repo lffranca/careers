@@ -4,6 +4,7 @@ package model
 type Person struct {
 	ID          int         `json:"id"`
 	Name        string      `json:"name"`
+	Hero        bool        `json:"hero"`
 	Powerstats  Powerstats  `json:"powerstats"`
 	Biography   Biography   `json:"biography"`
 	Appearance  Appearance  `json:"appearance"`

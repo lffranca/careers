@@ -6,6 +6,7 @@ import "database/sql"
 type PersonSQL struct {
 	ID   sql.NullInt64
 	Name sql.NullString
+	Hero sql.NullBool
 }
 
 // PowerstatsSQL PowerstatsSQL
