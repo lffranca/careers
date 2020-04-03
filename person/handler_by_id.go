@@ -10,8 +10,7 @@ import (
 	"github.com/lffranca/careers/util"
 )
 
-// GetByID GetByID
-func GetByID(c *gin.Context) {
+func getByID(c *gin.Context) {
 	db, errDB := c.MustGet(util.ConstContextDB).(*sql.DB)
 	if !errDB {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid request"})

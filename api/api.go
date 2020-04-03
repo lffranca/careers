@@ -20,10 +20,10 @@ func InitAPI(wgParent *sync.WaitGroup) {
 
 	router := gin.Default()
 
-	routerAPI := router.Group("/api")
+	routerAPI := router.Group("/api/person")
 	routerAPI.Use(dbConn.MiddlewareDB())
 	{
-		routerAPI.GET("/:id", person.GetByID)
+		person.Routes(routerAPI)
 	}
 
 	router.Run(":3000")
