@@ -3,6 +3,7 @@ package model
 // Person Person
 type Person struct {
 	ID          int         `json:"id"`
+	UUID        string      `json:"uuid"`
 	Name        string      `json:"name" form:"name" binding:"required"`
 	Hero        bool        `json:"hero"`
 	Powerstats  Powerstats  `json:"powerstats"`

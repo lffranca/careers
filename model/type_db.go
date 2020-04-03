@@ -5,6 +5,7 @@ import "database/sql"
 // PersonSQL PersonSQL
 type PersonSQL struct {
 	ID   sql.NullInt64
+	UUID sql.NullString
 	Name sql.NullString
 	Hero sql.NullBool
 }
@@ -13,6 +14,7 @@ type PersonSQL struct {
 func (p *PersonSQL) GetModelJSON() Person {
 	return Person{
 		ID:   int(p.ID.Int64),
+		UUID: p.UUID.String,
 		Name: p.Name.String,
 		Hero: p.Hero.Bool,
 	}

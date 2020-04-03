@@ -6,6 +6,7 @@ import (
 	"errors"
 	"log"
 
+	"github.com/google/uuid"
 	"github.com/lffranca/careers/model"
 )
 
@@ -303,18 +304,27 @@ func createPersonImage(db *sql.DB, person *model.Person) (*model.Person, error) 
 
 func createPerson(db *sql.DB, person *model.Person) (*model.Person, error) {
 	queryPerson := `
-		insert into person (name, hero)
+		insert into person (uuid, name, hero)
 		values (
 			$1,
-			$2
+			$2,
+			$3
 		)
 		returning id
 		;
 	`
 
+	puuid, errNewUUID := uuid.NewUUID()
+	if errNewUUID != nil {
+		return nil, errNewUUID
+	}
+
+	person.UUID = puuid.String()
+
 	rowsPerson, errRowsPerson := db.QueryContext(
 		context.Background(),
 		queryPerson,
+		person.UUID,
 		person.Name,
 		person.Hero,
 	)
@@ -379,6 +389,7 @@ func getPersonByID(db *sql.DB, id int) (*model.Person, error) {
 	query := `
 		select
 			p.id,
+			p.uuid,
 			p.name,
 			p.hero,
 			p2.id as powerstats_id,
@@ -439,6 +450,7 @@ func getPersonByID(db *sql.DB, id int) (*model.Person, error) {
 
 		if err := rowsPerson.Scan(
 			&personSQL.ID,
+			&personSQL.UUID,
 			&personSQL.Name,
 			&personSQL.Hero,
 
