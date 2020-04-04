@@ -7,4 +7,5 @@ func Routes(route *gin.RouterGroup) {
 	route.GET("/:id", getByID)
 	route.GET("", get)
 	route.POST("", create)
+	route.DELETE("/:id", delete)
 }

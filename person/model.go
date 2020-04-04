@@ -43,6 +43,8 @@ func createPersonPowerstats(db *sql.DB, person *model.Person) (*model.Person, er
 		return nil, errRows
 	}
 
+	defer rows.Close()
+
 	itemID := 0
 	for rows.Next() {
 		var idSQL sql.NullInt64
@@ -95,6 +97,8 @@ func createPersonBiography(db *sql.DB, person *model.Person) (*model.Person, err
 	if errRows != nil {
 		return nil, errRows
 	}
+
+	defer rows.Close()
 
 	itemID := 0
 	for rows.Next() {
@@ -149,6 +153,8 @@ func createPersonAppearance(db *sql.DB, person *model.Person) (*model.Person, er
 		return nil, errRows
 	}
 
+	defer rows.Close()
+
 	itemID := 0
 	for rows.Next() {
 		var idSQL sql.NullInt64
@@ -193,6 +199,8 @@ func createPersonWork(db *sql.DB, person *model.Person) (*model.Person, error) {
 	if errRows != nil {
 		return nil, errRows
 	}
+
+	defer rows.Close()
 
 	itemID := 0
 	for rows.Next() {
@@ -239,6 +247,8 @@ func createPersonConnections(db *sql.DB, person *model.Person) (*model.Person, e
 		return nil, errRows
 	}
 
+	defer rows.Close()
+
 	itemID := 0
 	for rows.Next() {
 		var idSQL sql.NullInt64
@@ -281,6 +291,8 @@ func createPersonImage(db *sql.DB, person *model.Person) (*model.Person, error) 
 	if errRows != nil {
 		return nil, errRows
 	}
+
+	defer rows.Close()
 
 	itemID := 0
 	for rows.Next() {
@@ -333,6 +345,8 @@ func createPerson(db *sql.DB, person *model.Person) (*model.Person, error) {
 	if errRowsPerson != nil {
 		return nil, errRowsPerson
 	}
+
+	defer rowsPerson.Close()
 
 	personID := 0
 	for rowsPerson.Next() {
@@ -439,6 +453,8 @@ func getPersonByID(db *sql.DB, id int) (*model.Person, error) {
 	if errRowsPerson != nil {
 		return nil, errRowsPerson
 	}
+
+	defer rowsPerson.Close()
 
 	person := model.Person{}
 	for rowsPerson.Next() {
@@ -584,6 +600,8 @@ func getPeople(db *sql.DB, search string, hero string) ([]model.Person, error) {
 		return nil, errRowsPerson
 	}
 
+	defer rowsPerson.Close()
+
 	people := []model.Person{}
 	for rowsPerson.Next() {
 		personSQL := model.PersonSQL{}
@@ -651,4 +669,27 @@ func getPeople(db *sql.DB, search string, hero string) ([]model.Person, error) {
 	}
 
 	return people, nil
+}
+
+func deletePersonByID(db *sql.DB, id int) error {
+	queries := []string{
+		"delete from powerstats where person_id = $1;",
+		"delete from biography where person_id = $1;",
+		"delete from appearance where person_id = $1;",
+		"delete from work where person_id = $1;",
+		"delete from connections where person_id = $1;",
+		"delete from image where person_id = $1;",
+		"delete from person where id = $1;",
+	}
+
+	for _, query := range queries {
+		rows, errRows := db.QueryContext(context.Background(), query, id)
+		if errRows != nil {
+			return errRows
+		}
+
+		rows.Close()
+	}
+
+	return nil
 }
